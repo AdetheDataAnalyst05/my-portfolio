@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adeoye Adedibu — Data Analyst</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #16161f;
+      --accent: #00e5a0;
+      --accent2: #00b37d;
+      --text: #f0f0f0;
+      --muted: #888899;
+      --border: rgba(255,255,255,0.07);
+      --card: rgba(255,255,255,0.04);
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none; z-index: 0;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.875rem; color: var(--muted); font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); }
+    .mobile-menu { display: none; position: fixed; top: 65px; left: 0; right: 0; background: rgba(10,10,15,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; z-index: 99; flex-direction: column; gap: 1.2rem; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--muted); font-size: 1rem; font-weight: 500; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    section { position: relative; z-index: 1; padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 8rem; max-width: 1100px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.2); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; color: var(--accent); font-weight: 500; margin-bottom: 1.8rem; width: fit-content; animation: fadeUp 0.6s ease both; }
+    .hero-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero-name { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 1rem; animation: fadeUp 0.6s 0.1s ease both; }
+    .hero-name span { color: var(--accent); }
+    .hero-title { font-size: clamp(1rem, 2.5vw, 1.3rem); color: var(--muted); font-weight: 300; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.2s ease both; }
+    .hero-desc { max-width: 560px; font-size: 1.05rem; color: #bbbbc8; line-height: 1.8; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.3s ease both; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.4s ease both; }
+    .btn-primary { background: var(--accent); color: #0a0a0f; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; padding: 0.85rem 1.8rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,160,0.25); }
+
+    .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 600; margin-bottom: 0.8rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 1rem; }
+    .section-sub { color: var(--muted); max-width: 520px; font-size: 1rem; margin-bottom: 3.5rem; }
+
+    /* ABOUT */
+    .about-text p { color: #bbbbc8; margin-bottom: 1rem; font-size: 1rem; }
+
+    /* STRENGTHS */
+    .strengths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .strength-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .strength-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--accent); font-size: 0.85rem; }
+    .strength-text h4 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .strength-text p { font-size: 0.85rem; color: var(--muted); }
+
+    /* TOOLS */
+    .tools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+    .tool-chip { display: flex; align-items: center; gap: 0.6rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+    .tool-chip:hover { border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.05); }
+    .tool-chip i { color: var(--accent); font-size: 0.9rem; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.2s; }
+    .skill-card:hover { border-color: rgba(0,229,160,0.2); background: rgba(0,229,160,0.03); }
+    .skill-card-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(0,229,160,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1rem; margin-bottom: 1rem; }
+    .skill-card h4 { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .skill-list { list-style: none; }
+    .skill-list li { font-size: 0.82rem; color: var(--muted); padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .skill-list li:last-child { border-bottom: none; }
+
+    /* PROJECTS */
+    .projects-grid { display: flex; flex-direction: column; gap: 2rem; }
+    .project-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; }
+    .project-card:hover { border-color: rgba(0,229,160,0.25); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .project-img { position: relative; overflow: hidden; background: var(--bg2); height: 280px; width: 100%; }
+    .project-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform 0.4s; }
+    .project-card:hover .project-img img { transform: scale(1.05); }
+    .project-tag { position: absolute; top: 1rem; left: 1rem; background: rgba(0,229,160,0.15); border: 1px solid rgba(0,229,160,0.3); color: var(--accent); font-size: 0.7rem; font-weight: 600; padding: 0.3rem 0.7rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; }
+    .project-body { padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .project-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.6rem; color: var(--accent); }
+    .project-summary { font-size: 0.9rem; color: #bbbbc8; margin-bottom: 1.2rem; line-height: 1.7; }
+
+    /* DASHBOARD IMAGE — plain, no overlay, no link */
+    .dashboard-img { margin-bottom: 1.2rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+    .dashboard-img img { width: 100%; display: block; }
+
+    .project-insights { margin-bottom: 1.5rem; }
+    .project-insights h5 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 0.6rem; font-weight: 600; }
+    .insight-item { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: #ccccd8; margin-bottom: 0.4rem; }
+    .insight-item::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+    .project-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .tool-tag { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.65rem; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+    .project-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn-case { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: #0a0a0f; font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; padding: 0.65rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-case:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    /* CONTACT */
+    .contact-info h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
+    .contact-info p { color: var(--muted); margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+    .contact-link { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; transition: all 0.2s; font-size: 0.9rem; }
+    .contact-link:hover { border-color: rgba(0,229,160,0.3); background: rgba(0,229,160,0.05); transform: translateX(4px); }
+    .contact-link-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,229,160,0.1); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.9rem; flex-shrink: 0; }
+    .contact-link-text span { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.1rem; }
+    .social-section h4 { font-family: var(--font-display); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 1.2rem; font-weight: 600; }
+    .social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .social-link { display: flex; align-items: center; gap: 0.7rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1.2rem; font-size: 0.85rem; font-weight: 500; transition: all 0.25s; color: var(--muted); }
+    .social-link:hover { transform: translateY(-3px); }
+    .social-link i { font-size: 1.1rem; }
+    .social-link.medium:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+    .social-link.twitter:hover { border-color: #1DA1F2; color: #1DA1F2; background: rgba(29,161,242,0.05); }
+    .social-link.linkedin:hover { border-color: #0A66C2; color: #0A66C2; background: rgba(10,102,194,0.05); }
+
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--muted); }
+    footer span { color: var(--accent); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .strengths { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-card { grid-template-columns: 1fr; }
+      .project-img { min-height: 220px; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.2rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-logo">AA.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#projects" onclick="toggleMenu()">Projects</a>
+  <a href="#skills" onclick="toggleMenu()">Skills</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">Available for opportunities</div>
+  <h1 class="hero-name">Adeoye<br/><span>Adedibu.</span></h1>
+  <p class="hero-title">Data Analyst · Business Intelligence · Financial Analytics</p>
+  <p class="hero-desc">I transform raw data into clear, actionable insights. Combining a strong accounting foundation with modern analytics tools to help businesses make smarter decisions.</p>
+  <div class="hero-ctas">
+    <a href="#projects" class="btn-primary">View Projects</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label fade-in">About Me</div>
+  <h2 class="section-title fade-in">Analyst. Storyteller.<br/>Problem Solver.</h2>
+
+  <!-- 1. About text -->
+  <div class="about-text fade-in">
+    <p>I'm a detail-oriented Data Analyst based in Lagos, Nigeria. My work sits at the intersection of finance and data — I use analytics to surface insights that drive real business decisions.</p>
+    <p>With a B.Sc. in Accounting from Babcock University and hands-on training through TechCrushHQ, I build interactive dashboards and reports that tell a clear story from complex data.</p>
+  </div>
+
+  <!-- 2. Strengths -->
+  <div class="strengths fade-in">
+    <div class="strength-item">
+      <div class="strength-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="strength-text">
+        <h4>Data Storytelling</h4>
+        <p>Turning numbers into narratives that non-technical stakeholders can act on.</p>
+      </div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-icon"><i class="fas fa-calculator"></i></div>
+      <div class="strength-text">
+        <h4>Financial Acumen</h4>
+        <p>Deep understanding of financial statements, ratios, and accounting principles.</p>
+      </div>
+    </div>
+    <div class="strength-item">
+      <div class="strength-icon"><i class="fas fa-table-columns"></i></div>
+      <div class="strength-text">
+        <h4>Dashboard Design</h4>
+        <p>Multi-page interactive dashboards with KPIs, slicers, and DAX measures.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Tools & Technologies -->
+  <div class="fade-in" style="margin-top:3rem;">
+    <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:1rem;font-weight:600;">Tools & Technologies</p>
+    <div class="tools-grid">
+      <div class="tool-chip"><i class="fas fa-file-excel"></i> Microsoft Excel</div>
+      <div class="tool-chip"><i class="fas fa-chart-bar"></i> Power BI</div>
+      <div class="tool-chip"><i class="fas fa-database"></i> SQL Server</div>
+      <div class="tool-chip"><i class="fas fa-broom"></i> Data Cleaning</div>
+      <div class="tool-chip"><i class="fas fa-chart-pie"></i> Data Visualization</div>
+      <div class="tool-chip"><i class="fas fa-brain"></i> DAX / Power Query</div>
+      <div class="tool-chip"><i class="fas fa-chart-area"></i> Descriptive Statistics</div>
+      <div class="tool-chip"><i class="fas fa-file-invoice-dollar"></i> Financial Analysis</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS / EXPERTISE -->
+<section id="skills">
+  <div class="section-label fade-in">Expertise</div>
+  <h2 class="section-title fade-in">Skills</h2>
+  <div class="skills-grid fade-in">
+    <div class="skill-card">
+      <div class="skill-card-icon"><i class="fas fa-chart-bar"></i></div>
+      <h4>Data Analytics</h4>
+      <ul class="skill-list">
+        <li>Microsoft Excel (Advanced)</li>
+        <li>Power BI Desktop</li>
+        <li>Microsoft SQL Server</li>
+        <li>DAX & Power Query</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon"><i class="fas fa-eye"></i></div>
+      <h4>Visualization & Reporting</h4>
+      <ul class="skill-list">
+        <li>Dashboard Design</li>
+        <li>Data Visualization</li>
+        <li>KPI Reporting</li>
+        <li>Descriptive Statistics</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-icon"><i class="fas fa-briefcase"></i></div>
+      <h4>Professional Skills</h4>
+      <ul class="skill-list">
+        <li>Financial Analysis</li>
+        <li>Analytical Thinking</li>
+        <li>Attention to Detail</li>
+        <li>Report Writing</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS / CASE STUDIES -->
+<section id="projects">
+  <div class="section-label fade-in">Case Studies</div>
+  <h2 class="section-title fade-in">Featured Projects</h2>
+  <p class="section-sub fade-in">Each project follows a structured approach — problem, analysis, insight, and recommendation.</p>
+  <div class="projects-grid">
+
+    <!-- PROJECT CARD — copy and paste below this to add a new project -->
+    <div class="project-card fade-in">
+      <div class="project-img">
+        <img src="superstore.jpg" alt="Superstore" />
+        <div class="project-tag">Excel · Sales Analytics</div>
+      </div>
+      <div class="project-body">
+        <div>
+          <h3 class="project-title">Superstore Sales Analysis 2014–2017</h3>
+          <p class="project-summary">Analyzed 4 years of retail sales data to identify top-performing categories, regional profit gaps, and seasonal trends — delivering a structured dashboard for executive decision-making.</p>
+
+          <!-- DASHBOARD IMAGE — just shows the image, no link or overlay -->
+          <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:0.6rem;font-weight:600;">Dashboard Preview</p>
+          <div class="dashboard-img">
+            <img src="dashboard1.jpg" alt="Superstore Dashboard 1" />
+          </div>
+          <div class="dashboard-img" style="margin-top:0.75rem;">
+            <img src="dashboard2.jpg" alt="Superstore Dashboard 2" />
+          </div>
+
+          <div class="project-insights">
+            <h5>Key Insights</h5>
+            <div class="insight-item">Technology leads profit at $146K — nearly equal to Furniture and Office Supplies combined.</div>
+            <div class="insight-item">Furniture generates high revenue ($742K) but poor profit ($19.5K) — a margin crisis hiding in plain sight.</div>
+            <div class="insight-item">December peaks at $44K profit; July dips to $14K — clear seasonality requiring strategic planning.</div>
+          </div>
+          <div class="project-tools">
+            <span class="tool-tag">Microsoft Excel</span>
+            <span class="tool-tag">Pivot Tables</span>
+            <span class="tool-tag">Dashboard Design</span>
+            <span class="tool-tag">Descriptive Statistics</span>
+          </div>
+        </div>
+        <div class="project-actions">
+          <a href="https://medium.com/@adedibuadeoye/analyzing-a-superstore-dataset-b979a380e15a" target="_blank" class="btn-case">
+            <i class="fab fa-medium"></i> Medium Article
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- END PROJECT CARD -->
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label fade-in">Get In Touch</div>
+  <h2 class="section-title fade-in">Let's Work Together</h2>
+  <div class="fade-in">
+    <div class="contact-info">
+      <h3>Open to opportunities,<br/>collaborations & conversations.</h3>
+      <p>Based in Lagos, Nigeria. Feel free to reach out through any of the channels below.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:adedibuadeoye@gmail.com" class="contact-link">
+        <div class="contact-link-icon"><i class="fas fa-envelope"></i></div>
+        <div class="contact-link-text"><span>Email</span>adedibuadeoye@gmail.com</div>
+      </a>
+      <a href="tel:+2349074890630" class="contact-link">
+        <div class="contact-link-icon"><i class="fas fa-phone"></i></div>
+        <div class="contact-link-text"><span>Phone</span>+234 907 489 0630</div>
+      </a>
+      <div class="contact-link">
+        <div class="contact-link-icon"><i class="fas fa-location-dot"></i></div>
+        <div class="contact-link-text"><span>Location</span>Lagos, Nigeria</div>
+      </div>
+    </div>
+
+    <!-- FIND ME ON -->
+    <div class="social-section" style="margin-top:2rem;">
+      <h4>Find me on</h4>
+      <div class="social-links">
+        <a href="https://medium.com/@adedibuadeoye" target="_blank" class="social-link medium">
+          <i class="fab fa-medium"></i> Medium
+        </a>
+        <a href="https://x.com/adeoyeadedibu" target="_blank" class="social-link twitter">
+          <i class="fab fa-x-twitter"></i> Twitter
+        </a>
+        <a href="https://www.linkedin.com/in/adeoye-adedibu-5b446428b" target="_blank" class="social-link linkedin">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & built by <span>Adeoye Adedibu</span> · Lagos, Nigeria · 2026</p>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : ''; });
+  });
+</script>
+</body>
+</html>
